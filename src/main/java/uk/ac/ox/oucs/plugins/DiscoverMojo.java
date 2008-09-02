@@ -401,7 +401,7 @@ public class DiscoverMojo extends AbstractMojo
 					remoteRepositories, localRepository);
 			// Projects built from the repository don't have our artifact handler.
 			// Things all blow up if we try to have a custom MavenProjectBuilder component.
-			project.setArtifact(implProjectArtifact);
+			project.getArtifact().setArtifactHandler(new CustomArtifactHandlerManager.MissingDependencyArtifactHandler(project.getArtifact().getArtifactHandler()));
 		}
 		catch (ArtifactNotFoundException anfe)
 		{

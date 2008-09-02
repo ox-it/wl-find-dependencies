@@ -27,6 +27,50 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
  */
 public class CustomArtifactHandlerManager implements ArtifactHandlerManager
 {
+	public static final class MissingDependencyArtifactHandler implements
+			ArtifactHandler {
+		private final ArtifactHandler handler;
+
+		public MissingDependencyArtifactHandler(ArtifactHandler handler) {
+			this.handler = handler;
+		}
+
+		public String getClassifier()
+		{
+			return handler.getClassifier();
+		}
+
+		public String getDirectory()
+		{
+			return handler.getDirectory();
+		}
+
+		public String getExtension()
+		{
+			return handler.getExtension();
+		}
+
+		public String getLanguage()
+		{
+			return handler.getLanguage();
+		}
+
+		public String getPackaging()
+		{
+			return handler.getPackaging();
+		}
+
+		public boolean isAddedToClasspath()
+		{
+			return handler.isAddedToClasspath();
+		}
+
+		public boolean isIncludesDependencies()
+		{
+			return false;
+		}
+	}
+
 	private org.apache.maven.artifact.handler.manager.ArtifactHandlerManager originalArtifactManager;
 
 	public ArtifactHandler getArtifactHandler(String type)
@@ -34,45 +78,7 @@ public class CustomArtifactHandlerManager implements ArtifactHandlerManager
 
 		final ArtifactHandler handler = originalArtifactManager.getArtifactHandler(type);
 
-		return new ArtifactHandler()
-		{
-
-			public String getClassifier()
-			{
-				return handler.getClassifier();
-			}
-
-			public String getDirectory()
-			{
-				return handler.getDirectory();
-			}
-
-			public String getExtension()
-			{
-				return handler.getExtension();
-			}
-
-			public String getLanguage()
-			{
-				return handler.getLanguage();
-			}
-
-			public String getPackaging()
-			{
-				return handler.getPackaging();
-			}
-
-			public boolean isAddedToClasspath()
-			{
-				return handler.isAddedToClasspath();
-			}
-
-			public boolean isIncludesDependencies()
-			{
-				return false;
-			}
-
-		};
+		return new MissingDependencyArtifactHandler(handler);
 	}
 
 	public void addHandlers(Map handlers) {
