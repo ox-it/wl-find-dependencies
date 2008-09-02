@@ -36,9 +36,8 @@ import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.resolver.ResolutionNode;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -69,12 +68,13 @@ public class DiscoverMojo extends AbstractMojo
 	
 	/** @component roleHint="custom" */
 	protected ArtifactMetadataSource customMetadataSource;
-
+		
 	/** @parameter expression="${localRepository}" */
 	protected ArtifactRepository localRepository;
 	
-    /** @parameter expression="${project.remoteArtifactRepositories}" */
-    protected List remoteRepositories;
+	
+	/** @parameter expression="${project.remoteArtifactRepositories}" */
+	protected List remoteRepositories;
 	
 	/** 
 	 * @parameter expression="${project.build.directory}/cache/implementations.properties"
@@ -139,6 +139,16 @@ public class DiscoverMojo extends AbstractMojo
 						customMetadataSource, null);
 				Set<Artifact> resolvedArtifacts = arr.getArtifacts();
 				
+				Set<ResolutionNode> arrRes = arr.getArtifactResolutionNodes();
+				
+				for (ResolutionNode node: arrRes)
+				{
+					getLog().info(node.getArtifact().getArtifactId());
+					for(String artifactId : (List<String>)node.getDependencyTrail())
+					{
+						getLog().info("  +"+ artifactId);
+					}
+				}
 
 				Set<Artifact> artifactsToFind = new HashSet<Artifact>();
 				
@@ -218,22 +228,12 @@ public class DiscoverMojo extends AbstractMojo
 			saveCachedImplmentations();
 		}
 		
-		
-		
-		MavenProject outputModel = new MavenProject(new Model());
-		outputModel.setGroupId(project.getGroupId());
-		outputModel.setArtifactId("discovered");
-		outputModel.setVersion(project.getVersion());
 
-		Parent parent = new Parent();
-		parent.setArtifactId(project.getArtifactId());
-		parent.setGroupId(project.getGroupId());
-		parent.setVersion(project.getVersion());
+		addToDependencies();
 		
-		outputModel.getModel().setParent(parent);
-		
-		
-		//List dependencies = new ArrayList(toDeploy.size());
+	}
+
+	private void addToDependencies() {
 		List dependencies = project.getDependencies();
 		for (Artifact artifact : toDeploy)
 		{
@@ -249,6 +249,8 @@ public class DiscoverMojo extends AbstractMojo
 		}
 		
 		project.setDependencies(dependencies);
+		
+		toDeploy = new HashSet<Artifact>();
 	}
 
 	private void loadCachedImplentations()
@@ -303,10 +305,6 @@ public class DiscoverMojo extends AbstractMojo
 				return true;
 		}
 		return false;
-//		return (artifact.getGroupId().startsWith("org.sakaiproject")
-//						&& "provided".equals(artifact.getScope()) && artifact
-//						.getArtifactId().endsWith("-api")) || ("war".equals(artifact
-//						.getType()));
 	}
 
 	public MavenProject findImplementation(Artifact artifact)
@@ -401,6 +399,9 @@ public class DiscoverMojo extends AbstractMojo
 			customResolver.resolve(implProjectArtifact, remoteRepositories, localRepository);
 			project = mavenProjectBuilder.buildFromRepository(implProjectArtifact,
 					remoteRepositories, localRepository);
+			// Projects built from the repository don't have our artifact handler.
+			// Things all blow up if we try to have a custom MavenProjectBuilder component.
+			project.setArtifact(implProjectArtifact);
 		}
 		catch (ArtifactNotFoundException anfe)
 		{
