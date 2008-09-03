@@ -60,4 +60,14 @@
 	<scm>
 		<connection>scm:git:ssh://flounder.oucs.ox.ac.uk/home/buckett/git/find-dependencies.git</connection>
 	</scm>
+        <distributionManagement>
+                <repository>
+                        <uniqueVersion>false</uniqueVersion>
+                        <id>oucs-vle</id>
+                        <name>OUCS VLE Repository</name>
+                        <url>http://archiva.oucs.ox.ac.uk/archiva/repository/int
+ernal/</url>
+                        <layout>default</layout>
+                </repository>
+	</distributionManagement>
 </project>
