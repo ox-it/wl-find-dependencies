@@ -58,7 +58,8 @@
 		</plugins>
 	</build>
 	<scm>
-		<connection>scm:git:ssh://flounder.oucs.ox.ac.uk/home/buckett/git/find-dependencies.git</connection>
+		<connection>scm:git:git://flounder.oucs.ox.ac.uk/git/find-dependencies.git</connection>
+		<developerConnection>scm:git:ssh://flounder.oucs.ox.ac.uk/home/buckett/git/find-dependencies.git</developerConnection>
 	</scm>
         <distributionManagement>
                 <repository>
