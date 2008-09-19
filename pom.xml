@@ -5,7 +5,7 @@
 	<packaging>maven-plugin</packaging>
 	<version>1.4-SNAPSHOT</version>
 	<name>Find required dependencies</name>
-	<url>http://maven.apache.org</url>
+	<url>http://www.oucs.ox.ac.uk</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
