@@ -6,7 +6,7 @@
 	<version>1.4-SNAPSHOT</version>
 	<name>Find required dependencies</name>
 	<description>This will find all the required dependencies for a sakai deployment</description>
-	<url>http://www.oucs.ox.ac.uk</url>
+	<url>http://www.oucs.ox.ac.uk/</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
