@@ -7,6 +7,21 @@
 	<name>Find required dependencies</name>
 	<description>This will find all the required dependencies for a sakai deployment.</description>
 	<url>http://www.oucs.ox.ac.uk/</url>
+  <developers>
+    <developer>
+      <id>buckett</id>
+      <name>Matthew Buckett</name>
+      <email>matthew.buckett@oucs.ox.ac.uk</email>
+      <url>http://thicksliced.blogspot.com/url>
+      <organization>University of Oxford</organization>
+      <organizationUrl>http://www.ox.ac.uk/</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
+
 
 	<dependencies>
 		<dependency>
